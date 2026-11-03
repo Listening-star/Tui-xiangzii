@@ -3,9 +3,12 @@ App({
     // 通关进度：已解锁到第几关
     const saved = wx.getStorageSync('sokoban_unlocked')
     this.globalData.unlocked = saved || 1
-    // 用户设置
+    // 用户设置（补全操作方式，兼容旧版本）
     const settings = wx.getStorageSync('sokoban_settings')
-    this.globalData.settings = settings || { sound: true, vibrate: true }
+    this.globalData.settings = Object.assign(
+      { sound: true, vibrate: true, controlMode: 'dpad' },
+      settings || {}
+    )
   },
 
   // 保存设置
@@ -24,6 +27,6 @@ App({
 
   globalData: {
     unlocked: 1,
-    settings: { sound: true, vibrate: true }
+    settings: { sound: true, vibrate: true, controlMode: 'dpad' }
   }
 })

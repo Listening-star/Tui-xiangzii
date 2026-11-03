@@ -16,6 +16,16 @@
       </view>
       <switch checked="{{vibrate}}" bindchange="toggleVibrate" color="#5da038"/>
     </view>
+    <view class="row row-mode">
+      <view class="row-left">
+        <view class="row-icon row-icon-control"></view>
+        <text class="row-label">操作方式</text>
+      </view>
+      <view class="seg">
+        <view class="seg-btn {{controlMode==='dpad'?'sel':''}}" bindtap="chooseDpad">方向键</view>
+        <view class="seg-btn {{controlMode==='joystick'?'sel':''}}" bindtap="chooseJoystick">操纵杆</view>
+      </view>
+    </view>
   </view>
 
   <view class="group">

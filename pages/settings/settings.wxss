@@ -49,6 +49,54 @@
   color: #b09060;
 }
 
+/* 操作方式行：内容换行，高度自适应 */
+.row-mode {
+  height: auto;
+  padding: 22rpx 26rpx;
+  flex-wrap: wrap;
+}
+.seg {
+  display: flex;
+  background: rgba(90,60,25,.12);
+  border-radius: 14rpx;
+  padding: 6rpx;
+}
+.seg-btn {
+  padding: 14rpx 30rpx;
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #6b4d26;
+  border-radius: 10rpx;
+  transition: .15s;
+  white-space: nowrap;
+}
+.seg-btn.sel {
+  background: linear-gradient(180deg,#ffd861,#f0a92e);
+  color: #4a2f10;
+  box-shadow: 0 4rpx 0 #c9851f;
+}
+
+/* 操作方式图标（操纵杆简化图形） */
+.row-icon-control {
+  position: relative;
+  width: 30rpx;
+  height: 30rpx;
+  border: 4rpx solid #7a4a22;
+  border-radius: 50%;
+  margin-right: 30rpx;
+}
+.row-icon-control::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 12rpx;
+  height: 12rpx;
+  margin: -6rpx 0 0 -6rpx;
+  background: #f49abe;
+  border-radius: 50%;
+}
+
 /* 音效（喇叭） */
 .row-icon-sound {
   position: relative;

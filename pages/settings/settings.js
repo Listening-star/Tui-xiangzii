@@ -3,12 +3,25 @@ const app = getApp()
 Page({
   data: {
     sound: true,
-    vibrate: true
+    vibrate: true,
+    controlMode: 'dpad'
   },
 
   onLoad() {
     const s = app.globalData.settings
-    this.setData({ sound: s.sound, vibrate: s.vibrate })
+    this.setData({
+      sound: s.sound,
+      vibrate: s.vibrate,
+      controlMode: s.controlMode || 'dpad'
+    })
+  },
+
+  chooseDpad() { this.setControlMode('dpad') },
+  chooseJoystick() { this.setControlMode('joystick') },
+  setControlMode(mode) {
+    const s = { ...app.globalData.settings, controlMode: mode }
+    app.saveSettings(s)
+    this.setData({ controlMode: mode })
   },
 
   toggleSound(e) {

@@ -105,6 +105,13 @@
   .switch.on { background: #5da038; }
   .switch::after { content: ''; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; background: #fff; border-radius: 50%; transition: .2s; }
   .switch.on::after { left: 23px; }
+  .set-row-mode { height: auto; padding-top: 12px; padding-bottom: 12px; flex-wrap: wrap; gap: 10px; }
+  .seg { display: flex; background: rgba(90,60,25,.12); border-radius: 10px; padding: 3px; }
+  .seg-btn {
+    padding: 7px 16px; font-size: 13px; font-weight: 600; color: #6b4d26;
+    border-radius: 8px; cursor: pointer; transition: .15s; white-space: nowrap;
+  }
+  .seg-btn.sel { background: linear-gradient(180deg,#ffd861,#f0a92e); color: #4a2f10; box-shadow: 0 2px 0 #c9851f; }
   .set-tip { margin-top: 16px; text-align: center; font-size: 11px; color: #eaf7d8; }
 
   /* ============ 关于 ============ */
@@ -213,6 +220,29 @@
   .dpad-center { background: transparent; border: none; box-shadow: none; }
   .dpad-center:active { transform: none; }
 
+  /* 操纵杆 */
+  .joystick { display: none; margin: 14px 0 22px; }
+  .joy-base {
+    position: relative; width: 150px; height: 150px; margin: 0 auto; border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #8a5a2e, #5e3617);
+    border: 3px solid #4a2a10;
+    box-shadow: inset 0 6px 14px rgba(0,0,0,.35), 0 6px 0 #4a2a10, 0 10px 16px rgba(0,0,0,.25);
+    touch-action: none; user-select: none;
+  }
+  .joy-knob {
+    position: absolute; left: 50%; top: 50%; width: 60px; height: 60px; margin: -30px 0 0 -30px;
+    border-radius: 50%; background: radial-gradient(circle at 35% 30%, #ffd9e8, #f49abe);
+    border: 3px solid #d97aa0;
+    box-shadow: 0 6px 10px rgba(0,0,0,.3), inset 0 -4px 8px rgba(200,90,130,.4);
+    transition: transform .12s ease-out;
+  }
+  .joystick.active .joy-knob { transition: none; }
+  .joy-dir { position: absolute; color: rgba(255,242,221,.4); font-size: 16px; }
+  .joy-up { top: 9px; left: 50%; transform: translateX(-50%); }
+  .joy-down { bottom: 9px; left: 50%; transform: translateX(-50%); }
+  .joy-left { left: 11px; top: 50%; transform: translateY(-50%); }
+  .joy-right { right: 11px; top: 50%; transform: translateY(-50%); }
+
   .mask {
     position: fixed; inset: 0; background: rgba(20,40,10,.62);
     display: none; align-items: center; justify-content: center; z-index: 100;
@@ -288,6 +318,13 @@
     <div class="sub-body">
       <div class="set-row"><span class="set-label">音效</span><div class="switch" id="swSound" onclick="toggle('sound')"></div></div>
       <div class="set-row"><span class="set-label">震动反馈</span><div class="switch" id="swVibrate" onclick="toggle('vibrate')"></div></div>
+      <div class="set-row set-row-mode">
+        <span class="set-label">操作方式</span>
+        <div class="seg">
+          <div class="seg-btn" id="modeDpad" onclick="setControlMode('dpad')">方向键</div>
+          <div class="seg-btn" id="modeJoy" onclick="setControlMode('joystick')">操纵杆</div>
+        </div>
+      </div>
       <div class="set-row" onclick="clearProgress()"><span class="set-label" style="color:#d9534f">清除通关进度</span><span class="mi-arrow">›</span></div>
       <div class="set-tip">关卡与进度仅保存在本机，无需联网。</div>
     </div>
@@ -332,7 +369,7 @@
       <div class="game-tool" onclick="goLevels()">选关</div>
     </div>
     <div class="board-wrap" id="boardWrap"><div class="board" id="board"></div></div>
-    <div class="dpad">
+    <div class="dpad" id="dpad">
       <div class="dpad-row"><div class="dpad-btn" onclick="move('up')">▲</div></div>
       <div class="dpad-row">
         <div class="dpad-btn" onclick="move('left')">◀</div>
@@ -340,6 +377,16 @@
         <div class="dpad-btn" onclick="move('right')">▶</div>
       </div>
       <div class="dpad-row"><div class="dpad-btn" onclick="move('down')">▼</div></div>
+    </div>
+
+    <div class="joystick" id="joystick">
+      <div class="joy-base" id="joyBase">
+        <div class="joy-dir joy-up">▲</div>
+        <div class="joy-dir joy-down">▼</div>
+        <div class="joy-dir joy-left">◀</div>
+        <div class="joy-dir joy-right">▶</div>
+        <div class="joy-knob" id="joyKnob"></div>
+      </div>
     </div>
   </div>
 
@@ -376,7 +423,8 @@ const levels = [
 const DIRS = { up:[-1,0], down:[1,0], left:[0,-1], right:[0,1] };
 let levelIndex=0, cells=[], targets=[], player={r:0,c:0}, steps=0, won=false, history=[], cellSize=0;
 let unlocked = Number(localStorage.getItem('sokoban_unlocked')||1);
-let settings = JSON.parse(localStorage.getItem('sokoban_settings')||'{"sound":true,"vibrate":true}');
+let settings = Object.assign({sound:true,vibrate:true,controlMode:'dpad'},
+  JSON.parse(localStorage.getItem('sokoban_settings')||'{}'));
 
 function go(page){
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
@@ -415,11 +463,76 @@ function refreshLevels(){
 function refreshSettings(){
   document.getElementById('swSound').className = 'switch'+(settings.sound?' on':'');
   document.getElementById('swVibrate').className = 'switch'+(settings.vibrate?' on':'');
+  const isJoy = settings.controlMode==='joystick';
+  document.getElementById('modeDpad').className = 'seg-btn'+(isJoy?'':' sel');
+  document.getElementById('modeJoy').className = 'seg-btn'+(isJoy?' sel':'');
 }
 function toggle(key){
   settings[key]=!settings[key];
   localStorage.setItem('sokoban_settings', JSON.stringify(settings));
   refreshSettings();
+}
+
+/* ===== 操作方式：方向键 / 操纵杆 ===== */
+function applyControlMode(){
+  const isJoy = settings.controlMode==='joystick';
+  document.getElementById('joystick').style.display = isJoy?'block':'none';
+  document.getElementById('dpad').style.display = isJoy?'none':'flex';
+}
+function setControlMode(mode){
+  settings.controlMode = mode;
+  localStorage.setItem('sokoban_settings', JSON.stringify(settings));
+  refreshSettings();
+  applyControlMode();
+}
+function initJoystick(){
+  const base = document.getElementById('joyBase');
+  const knob = document.getElementById('joyKnob');
+  const wrap = document.getElementById('joystick');
+  let center=null, active=false, fired=false, maxR=40, triggerR=18;
+  function getPoint(e){
+    if (e.touches && e.touches.length) return e.touches[0];
+    if (e.changedTouches && e.changedTouches.length) return e.changedTouches[0];
+    return e;
+  }
+  function joyStart(e){
+    const r = base.getBoundingClientRect();
+    center = {x:r.left+r.width/2, y:r.top+r.height/2};
+    maxR = base.clientWidth/2 - knob.clientWidth/2 - 2;
+    triggerR = maxR*0.42;
+    active = true; fired = false;
+    wrap.classList.add('active');
+    joyMove(e);
+    e.preventDefault();
+  }
+  function joyMove(e){
+    if(!active) return;
+    const p = getPoint(e);
+    let dx = p.clientX-center.x, dy = p.clientY-center.y;
+    const len = Math.hypot(dx,dy);
+    if(len>maxR){ dx=dx/len*maxR; dy=dy/len*maxR; }
+    knob.style.transform = 'translate('+dx+'px,'+dy+'px)';
+    if(Math.hypot(dx,dy)>=triggerR){
+      if(!fired){
+        fired = true;
+        const dir = Math.abs(dx)>Math.abs(dy) ? (dx>0?'right':'left') : (dy>0?'down':'up');
+        move(dir);
+      }
+    } else { fired = false; }
+    e.preventDefault();
+  }
+  function joyEnd(e){
+    active=false; fired=false;
+    wrap.classList.remove('active');
+    knob.style.transform='translate(0,0)';
+    if(e && e.preventDefault) e.preventDefault();
+  }
+  base.addEventListener('mousedown', joyStart);
+  window.addEventListener('mousemove', joyMove);
+  window.addEventListener('mouseup', joyEnd);
+  base.addEventListener('touchstart', joyStart, {passive:false});
+  window.addEventListener('touchmove', joyMove, {passive:false});
+  window.addEventListener('touchend', joyEnd, {passive:false});
 }
 function clearProgress(){
   if (confirm('确定要清除所有通关进度吗？')){
@@ -542,6 +655,8 @@ document.getElementById('boardWrap').addEventListener('touchend',e=>{
   ts=null;
 },{passive:true});
 
+initJoystick();
+applyControlMode();
 refreshHome();
 </script>
 </body>

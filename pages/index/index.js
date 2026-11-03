@@ -39,14 +39,28 @@ Page({
     cellSize: 32,
     steps: 0,
     won: false,
-    hasNext: true
+    hasNext: true,
+    controlMode: 'dpad',
+    joyActive: false,
+    joyX: 0,
+    joyY: 0
   },
 
   onLoad(options) {
     const level = options && options.level !== undefined ? parseInt(options.level) : 0
     this.history = []
     this.targets = []
+    this.joyFired = false
+    this.setData({ controlMode: app.globalData.settings.controlMode || 'dpad' })
     this.loadLevel(isNaN(level) ? 0 : level)
+  },
+
+  onShow() {
+    // 从设置页返回时同步最新操作方式
+    const mode = app.globalData.settings.controlMode || 'dpad'
+    if (mode !== this.data.controlMode) {
+      this.setData({ controlMode: mode })
+    }
   },
 
   makeCell(kind) {
@@ -199,6 +213,56 @@ Page({
       this.move(dy > 0 ? 'down' : 'up')
     }
     this.touchStart = null
+  },
+
+  // ===== 操纵杆 =====
+  onJoyStart(e) {
+    this.joyFired = false
+    this.setData({ joyActive: true })
+    wx.createSelectorQuery()
+      .in(this)
+      .select('.joy-base')
+      .boundingClientRect((rect) => {
+        if (!rect) return
+        this.joyCenter = { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 }
+        this.joyMaxR = rect.width * 0.3 - 2
+        this.joyTriggerR = this.joyMaxR * 0.42
+        this.updateJoy(e.touches[0].clientX, e.touches[0].clientY)
+      })
+      .exec()
+  },
+
+  onJoyMove(e) {
+    if (!this.joyCenter) return
+    const t = e.touches[0]
+    this.updateJoy(t.clientX, t.clientY)
+  },
+
+  updateJoy(px, py) {
+    let dx = px - this.joyCenter.x
+    let dy = py - this.joyCenter.y
+    const len = Math.hypot(dx, dy)
+    if (len > this.joyMaxR) {
+      dx = dx / len * this.joyMaxR
+      dy = dy / len * this.joyMaxR
+    }
+    this.setData({ joyX: Math.round(dx), joyY: Math.round(dy) })
+    if (Math.hypot(dx, dy) >= this.joyTriggerR) {
+      if (!this.joyFired) {
+        this.joyFired = true
+        const dir = Math.abs(dx) > Math.abs(dy)
+          ? (dx > 0 ? 'right' : 'left')
+          : (dy > 0 ? 'down' : 'up')
+        this.move(dir)
+      }
+    } else {
+      this.joyFired = false
+    }
+  },
+
+  onJoyEnd() {
+    this.joyFired = false
+    this.setData({ joyActive: false, joyX: 0, joyY: 0 })
   },
 
   undo() {
