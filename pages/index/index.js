@@ -37,6 +37,7 @@ Page({
     rows: 0,
     cols: 0,
     cellSize: 32,
+    pxUnit: 32 / 12,
     steps: 0,
     won: false,
     hasNext: true,
@@ -121,6 +122,7 @@ Page({
       rows: parsed.rows,
       cols: parsed.cols,
       cellSize: size,
+      pxUnit: size / 12,
       steps: 0,
       won: false,
       hasNext: index < levels.length - 1

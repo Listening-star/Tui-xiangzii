@@ -19,7 +19,7 @@
       <block wx:for="{{cells}}" wx:for-item="row" wx:for-index="r" wx:key="r">
         <view class="board-row">
           <view wx:for="{{row}}" wx:for-item="cell" wx:for-index="c" wx:key="c"
-                class="cell {{(r+c)%2===0?'grass-a':'grass-b'}}" style="width:{{cellSize}}px;height:{{cellSize}}px;">
+                class="cell {{(r+c)%2===0?'grass-a':'grass-b'}}" style="width:{{cellSize}}px;height:{{cellSize}}px;--px:{{pxUnit}}px;">
             <image wx:if="{{cell.useImg}}" class="cell-img" src="{{cell.img}}" mode="aspectFill"/>
             <view wx:else class="sprite {{cell.cls}}"></view>
           </view>

@@ -23,7 +23,6 @@
   padding: 0 26rpx;
   background: rgba(255,248,225,.94);
   border: 3rpx solid rgba(120,80,35,.3);
-  border-radius: 18rpx;
   margin-bottom: 16rpx;
   box-shadow: 0 5rpx 0 rgba(90,60,25,.28);
 }
@@ -58,7 +57,6 @@
 .seg {
   display: flex;
   background: rgba(90,60,25,.12);
-  border-radius: 14rpx;
   padding: 6rpx;
 }
 .seg-btn {
@@ -66,14 +64,12 @@
   font-size: 26rpx;
   font-weight: 600;
   color: #6b4d26;
-  border-radius: 10rpx;
   transition: .15s;
   white-space: nowrap;
 }
 .seg-btn.sel {
-  background: linear-gradient(180deg,#ffd861,#f0a92e);
+  background: #f0a92e;
   color: #4a2f10;
-  box-shadow: 0 4rpx 0 #c9851f;
 }
 
 /* 操作方式图标（操纵杆简化图形） */
@@ -82,7 +78,6 @@
   width: 30rpx;
   height: 30rpx;
   border: 4rpx solid #7a4a22;
-  border-radius: 50%;
   margin-right: 30rpx;
 }
 .row-icon-control::before {
@@ -94,7 +89,6 @@
   height: 12rpx;
   margin: -6rpx 0 0 -6rpx;
   background: #f49abe;
-  border-radius: 50%;
 }
 
 /* 音效（喇叭） */
@@ -124,7 +118,6 @@
   width: 18rpx;
   height: 30rpx;
   border: 4rpx solid #4a852c;
-  border-radius: 5rpx;
   margin-right: 30rpx;
 }
 
@@ -135,7 +128,6 @@
   height: 26rpx;
   border: 4rpx solid #d9534f;
   border-top: none;
-  border-radius: 0 0 6rpx 6rpx;
   margin-right: 30rpx;
   margin-left: 6rpx;
 }
@@ -148,7 +140,6 @@
   height: 6rpx;
   border: 3rpx solid #d9534f;
   border-bottom: none;
-  border-radius: 6rpx 6rpx 0 0;
   transform: translateX(-50%);
 }
 

@@ -1,3 +1,5 @@
+@import '/pixel-home-doubao.wxss';
+
 .home {
   min-height: 100vh;
   display: flex;
@@ -5,9 +7,7 @@
   align-items: center;
   padding: 0 44rpx;
   box-sizing: border-box;
-  background:
-    radial-gradient(circle at 80% 12%, rgba(255,240,170,.5) 0 60rpx, transparent 80rpx),
-    linear-gradient(180deg, #7fc24a 0%, #5da038 55%, #4a852c 100%);
+  background: #5da038;
 }
 
 /* 头部 */
@@ -18,45 +18,15 @@
   align-items: center;
 }
 .brain-logo {
-  position: relative;
-  width: 150rpx;
-  height: 138rpx;
-  background:
-    radial-gradient(circle at 41% 58%, #5a2f3f 0 5rpx, transparent 6rpx),
-    radial-gradient(circle at 60% 58%, #5a2f3f 0 5rpx, transparent 6rpx),
-    radial-gradient(circle at 38% 28%, #fcd5e3, #f49abe);
-  border-radius: 52% 48% 50% 46%;
-  box-shadow: inset -3rpx -4rpx 8rpx rgba(190,80,120,.4), 0 8rpx 20rpx rgba(0,0,0,.3);
-}
-.brain-logo::before {
-  content: '';
-  position: absolute;
-  left: 26rpx;
-  top: 28rpx;
-  width: 48rpx;
-  height: 40rpx;
-  border: 3rpx solid #e06a95;
-  border-bottom: none;
-  border-radius: 50% 50% 0 0;
-}
-.brain-logo::after {
-  content: '';
-  position: absolute;
-  right: 24rpx;
-  top: 52rpx;
-  width: 40rpx;
-  height: 32rpx;
-  border: 3rpx solid #e06a95;
-  border-top: none;
-  border-radius: 0 0 50% 50%;
+  margin-bottom: 20rpx;
 }
 .title {
-  margin-top: 28rpx;
+  margin-top: 20rpx;
   font-size: 64rpx;
   font-weight: 800;
   color: #fff8e7;
   letter-spacing: 6rpx;
-  text-shadow: 2rpx 3rpx 0 rgba(60,90,30,.6), 0 6rpx 14rpx rgba(0,0,0,.25);
+  text-shadow: 2rpx 3rpx 0 rgba(60,90,30,.6);
 }
 .subtitle {
   margin-top: 12rpx;
@@ -77,14 +47,13 @@
   align-items: center;
   justify-content: center;
   height: 100rpx;
-  border-radius: 50rpx;
-  background: linear-gradient(180deg, #ffd861, #f0a92e);
+  background: #f0a92e;
   color: #5e3a10;
   font-size: 34rpx;
   font-weight: 700;
   letter-spacing: 3rpx;
   border: 3rpx solid #d98f22;
-  box-shadow: 0 8rpx 0 #b9771a, 0 12rpx 20rpx rgba(0,0,0,.25);
+  box-shadow: 0 8rpx 0 #b9771a;
 }
 .btn-primary:active {
   transform: translateY(6rpx);
@@ -103,7 +72,6 @@
   padding: 0 28rpx;
   box-sizing: border-box;
   background: rgba(255,248,225,.92);
-  border-radius: 20rpx;
   border: 3rpx solid rgba(120,80,35,.35);
   box-shadow: 0 5rpx 0 rgba(90,60,25,.35);
 }
@@ -113,7 +81,6 @@
 .mi-icon {
   width: 40rpx;
   height: 40rpx;
-  border-radius: 10rpx;
   margin-right: 22rpx;
 }
 .mi-icon-grid {
@@ -125,11 +92,9 @@
 }
 .mi-icon-gear {
   background: #8a6a3a;
-  border-radius: 50%;
 }
 .mi-icon-info {
   background: #c98a4a;
-  border-radius: 50%;
 }
 .mi-label {
   font-size: 30rpx;

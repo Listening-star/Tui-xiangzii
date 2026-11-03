@@ -20,13 +20,11 @@
   flex: 1;
   height: 16rpx;
   background: rgba(60,40,20,.35);
-  border-radius: 8rpx;
   overflow: hidden;
 }
 .pt-fill {
   height: 100%;
-  background: linear-gradient(90deg, #ffd861, #f0a92e);
-  border-radius: 8rpx;
+  background: #f0a92e;
 }
 .pt-num {
   margin-left: 20rpx;
@@ -47,7 +45,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 18rpx;
   background: #fff3d6;
   border: 3rpx solid rgba(120,80,35,.35);
   box-shadow: 0 5rpx 0 rgba(90,60,25,.3);
@@ -74,9 +71,8 @@
 }
 
 .cell-current {
-  background: linear-gradient(135deg, #ffd861, #f0a92e);
+  background: #f0a92e;
   border-color: #d98f22;
-  box-shadow: 0 6rpx 18rpx rgba(240,169,46,.5);
 }
 .cell-current .num {
   color: #5e3a10;
@@ -107,7 +103,6 @@
   transform: translateX(-50%);
   border: 3rpx solid rgba(255,240,200,.5);
   border-bottom: none;
-  border-radius: 9rpx 9rpx 0 0;
 }
 .lock-body {
   position: absolute;
@@ -117,5 +112,4 @@
   height: 16rpx;
   transform: translateX(-50%);
   background: rgba(255,240,200,.5);
-  border-radius: 3rpx;
 }
