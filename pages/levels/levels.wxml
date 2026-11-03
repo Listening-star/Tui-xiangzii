@@ -1,0 +1,22 @@
+<view class="levels-page">
+  <view class="progress-tip">
+    <text class="pt-label">通关进度</text>
+    <view class="pt-bar">
+      <view class="pt-fill" style="width:{{cleared*100/total}}%;"></view>
+    </view>
+    <text class="pt-num">{{cleared}}/{{total}}</text>
+  </view>
+
+  <view class="grid">
+    <view wx:for="{{items}}" wx:key="index"
+          class="cell cell-{{item.status}}"
+          data-index="{{item.index}}" bindtap="enter">
+      <view class="num">{{item.num}}</view>
+      <view class="check" wx:if="{{item.status==='cleared'}}">✓</view>
+      <view class="lock" wx:if="{{item.status==='locked'}}">
+        <view class="lock-shackle"></view>
+        <view class="lock-body"></view>
+      </view>
+    </view>
+  </view>
+</view>

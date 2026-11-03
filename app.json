@@ -1,0 +1,17 @@
+{
+  "pages": [
+    "pages/home/home",
+    "pages/index/index",
+    "pages/levels/levels",
+    "pages/settings/settings",
+    "pages/about/about"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#2b2b3a",
+    "navigationBarTitleText": "推箱子",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#1f1f2e"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

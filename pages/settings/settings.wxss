@@ -1,0 +1,112 @@
+.settings-page {
+  min-height: 100vh;
+  padding: 30rpx 36rpx;
+  box-sizing: border-box;
+}
+
+.group {
+  margin-bottom: 40rpx;
+}
+.group-title {
+  font-size: 24rpx;
+  color: #eaf7d8;
+  margin-bottom: 16rpx;
+  padding-left: 10rpx;
+  font-weight: 600;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 104rpx;
+  padding: 0 26rpx;
+  background: rgba(255,248,225,.94);
+  border: 3rpx solid rgba(120,80,35,.3);
+  border-radius: 18rpx;
+  margin-bottom: 16rpx;
+  box-shadow: 0 5rpx 0 rgba(90,60,25,.28);
+}
+.row-left {
+  display: flex;
+  align-items: center;
+}
+.row-icon {
+  width: 44rpx;
+  height: 44rpx;
+  margin-right: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.row-label {
+  font-size: 30rpx;
+  color: #4a3418;
+  font-weight: 600;
+}
+.row-arrow {
+  font-size: 40rpx;
+  color: #b09060;
+}
+
+/* 音效（喇叭） */
+.row-icon-sound {
+  position: relative;
+  width: 10rpx;
+  height: 24rpx;
+  background: #e08a2a;
+  margin-right: 30rpx;
+  margin-left: 8rpx;
+}
+.row-icon-sound::before {
+  content: '';
+  position: absolute;
+  right: 9rpx;
+  top: 50%;
+  width: 0;
+  height: 0;
+  border-top: 13rpx solid transparent;
+  border-bottom: 13rpx solid transparent;
+  border-right: 13rpx solid #e08a2a;
+  transform: translateY(-50%);
+}
+
+/* 震动（手机） */
+.row-icon-vibrate {
+  width: 18rpx;
+  height: 30rpx;
+  border: 4rpx solid #4a852c;
+  border-radius: 5rpx;
+  margin-right: 30rpx;
+}
+
+/* 清除（垃圾桶） */
+.row-icon-clear {
+  position: relative;
+  width: 22rpx;
+  height: 26rpx;
+  border: 4rpx solid #d9534f;
+  border-top: none;
+  border-radius: 0 0 6rpx 6rpx;
+  margin-right: 30rpx;
+  margin-left: 6rpx;
+}
+.row-icon-clear::before {
+  content: '';
+  position: absolute;
+  top: -8rpx;
+  left: 50%;
+  width: 12rpx;
+  height: 6rpx;
+  border: 3rpx solid #d9534f;
+  border-bottom: none;
+  border-radius: 6rpx 6rpx 0 0;
+  transform: translateX(-50%);
+}
+
+.tip {
+  margin-top: 30rpx;
+  text-align: center;
+  font-size: 22rpx;
+  color: #eaf7d8;
+}

@@ -1,0 +1,7 @@
+{
+  "desc": "推箱子小程序索引",
+  "rules": [{
+    "action": "allow",
+    "page": "*"
+  }]
+}

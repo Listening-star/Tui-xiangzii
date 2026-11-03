@@ -1,0 +1,33 @@
+<view class="settings-page">
+
+  <view class="group">
+    <view class="group-title">偏好</view>
+    <view class="row">
+      <view class="row-left">
+        <view class="row-icon row-icon-sound"></view>
+        <text class="row-label">音效</text>
+      </view>
+      <switch checked="{{sound}}" bindchange="toggleSound" color="#5da038"/>
+    </view>
+    <view class="row">
+      <view class="row-left">
+        <view class="row-icon row-icon-vibrate"></view>
+        <text class="row-label">震动反馈</text>
+      </view>
+      <switch checked="{{vibrate}}" bindchange="toggleVibrate" color="#5da038"/>
+    </view>
+  </view>
+
+  <view class="group">
+    <view class="group-title">数据</view>
+    <view class="row" bindtap="clearProgress">
+      <view class="row-left">
+        <view class="row-icon row-icon-clear"></view>
+        <text class="row-label">清除通关进度</text>
+      </view>
+      <text class="row-arrow">›</text>
+    </view>
+  </view>
+
+  <view class="tip">关卡与进度仅保存在本机，无需联网。</view>
+</view>

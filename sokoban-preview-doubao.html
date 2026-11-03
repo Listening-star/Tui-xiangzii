@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>脑子推植物 · 完整预览</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; }
+  body {
+    background: #1f1f2e;
+    color: #fff8e7;
+    font-family: -apple-system, "PingFang SC", "Helvetica Neue", sans-serif;
+    overflow: hidden;
+  }
+  .app { width: 100%; height: 100%; max-width: 480px; margin: 0 auto; position: relative; }
+  .view { display: none; height: 100%; overflow-y: auto; }
+  .view.active { display: block; }
+
+  /* ============ 主菜单 ============ */
+  #view-home {
+    background:
+      radial-gradient(circle at 80% 12%, rgba(255,240,170,.5) 0 30px, transparent 40px),
+      linear-gradient(180deg, #7fc24a 0%, #5da038 55%, #4a852c 100%);
+    text-align: center; padding: 0 22px;
+  }
+  .hero { margin-top: 11%; }
+  .brain-logo {
+    position: relative;
+    width: 78px; height: 72px; margin: 0 auto 18px;
+    background:
+      radial-gradient(circle at 41% 56%, #5a2f3f 0 3px, transparent 4px),
+      radial-gradient(circle at 60% 56%, #5a2f3f 0 3px, transparent 4px),
+      radial-gradient(circle at 38% 28%, #fcd5e3, #f49abe);
+    border-radius: 52% 48% 50% 46%;
+    box-shadow: inset -2px -3px 5px rgba(190,80,120,.4), 0 6px 14px rgba(0,0,0,.3);
+  }
+  .brain-logo::before {
+    content:''; position:absolute; left:14px; top:14px; width:26px; height:22px;
+    border:2px solid #e06a95; border-bottom:none; border-radius:50% 50% 0 0;
+  }
+  .brain-logo::after {
+    content:''; position:absolute; right:12px; top:28px; width:22px; height:18px;
+    border:2px solid #e06a95; border-top:none; border-radius:0 0 50% 50%;
+  }
+  .home-title { font-size: 34px; font-weight: 800; letter-spacing: 4px; color:#fff8e7; text-shadow:1px 2px 0 rgba(60,90,30,.6); }
+  .home-sub { margin-top: 8px; font-size: 12px; letter-spacing: 2px; color: #eefbdc; }
+  .home-menu { margin-top: 40px; }
+  .btn-primary {
+    height: 52px; line-height: 52px; border-radius: 26px;
+    background: linear-gradient(180deg, #ffd861, #f0a92e);
+    color: #5e3a10; font-size: 17px; font-weight: 700; letter-spacing: 2px;
+    border:2px solid #d98f22;
+    box-shadow: 0 6px 0 #b9771a, 0 10px 18px rgba(0,0,0,.25); cursor: pointer;
+  }
+  .btn-primary:active { transform: translateY(4px); box-shadow: 0 2px 0 #b9771a; }
+  .menu-item {
+    margin-top: 14px; height: 52px; display: flex; align-items: center;
+    padding: 0 16px; background: rgba(255,248,225,.94);
+    border:2px solid rgba(120,80,35,.3); border-radius: 12px; cursor: pointer;
+  }
+  .mi-dot { width: 12px; height: 12px; border-radius: 3px; margin-right: 14px; background: #5da038; }
+  .mi-label { font-size: 15px; color:#4a3418; font-weight:600; }
+  .mi-value { margin-left: auto; font-size: 13px; color: #9a7a4a; }
+  .mi-arrow { margin-left: 8px; font-size: 22px; color: #b09060; }
+  .home-footer { margin-top: 34px; font-size: 11px; color: #e4f5d0; }
+
+  /* ============ 子页头 ============ */
+  .sub-head { height: 50px; display: flex; align-items: center; padding: 0 12px; background: #4a852c; position: sticky; top: 0; z-index: 5; }
+  .sub-back { width: 34px; height: 34px; border-radius: 50%; background: #7a4a22; color: #ffe9c7; font-size: 22px; line-height: 32px; text-align: center; cursor: pointer; }
+  .sub-title { flex: 1; text-align: center; font-size: 17px; font-weight: 700; margin-right: 34px; }
+  .sub-body { padding: 16px 18px 40px; }
+
+  /* ============ 选关 ============ */
+  .lv-progress { display: flex; align-items: center; margin-bottom: 22px; }
+  .lv-bar { flex: 1; height: 8px; background: rgba(60,40,20,.35); border-radius: 4px; overflow: hidden; margin: 0 10px; }
+  .lv-fill { height: 100%; background: linear-gradient(90deg, #ffd861, #f0a92e); }
+  .lv-progress-text { font-size: 13px; color: #f0fbdc; }
+  .lv-grid { display: flex; flex-wrap: wrap; gap: 12px; }
+  .lv-cell {
+    position: relative; width: calc((100% - 36px)/4); height: 74px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 10px; background: #fff3d6; cursor: pointer;
+    font-size: 22px; font-weight: 700; color:#6a4a20;
+    border:2px solid rgba(120,80,35,.3);
+  }
+  .lv-cell.cleared { background: #3f7a26; color: #dff5c8; border-color:#2e5e1a; }
+  .lv-cell.cleared::after { content: '✓'; position: absolute; right: 6px; top: 4px; font-size: 12px; color: #ffe066; }
+  .lv-cell.current { background: linear-gradient(135deg, #ffd861, #f0a92e); color: #5e3a10; }
+  .lv-cell.locked { background: rgba(90,60,30,.45); color: rgba(255,240,200,.4); }
+  .lv-cell.locked::after {
+    content: ''; position: absolute; right: 6px; top: 8px;
+    width: 11px; height: 11px; border:2px solid rgba(255,240,200,.5);
+    border-bottom: none; border-radius: 6px 6px 0 0;
+  }
+
+  /* ============ 设置 ============ */
+  .set-row {
+    height: 52px; display: flex; align-items: center; justify-content: space-between;
+    padding: 0 16px; background: rgba(255,248,225,.94); border:2px solid rgba(120,80,35,.3);
+    border-radius: 12px; margin-bottom: 12px;
+  }
+  .set-label { font-size: 15px; color:#4a3418; font-weight:600; }
+  .switch { position: relative; width: 46px; height: 26px; background: #999; border-radius: 13px; cursor: pointer; transition: .2s; }
+  .switch.on { background: #5da038; }
+  .switch::after { content: ''; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; background: #fff; border-radius: 50%; transition: .2s; }
+  .switch.on::after { left: 23px; }
+  .set-tip { margin-top: 16px; text-align: center; font-size: 11px; color: #eaf7d8; }
+
+  /* ============ 关于 ============ */
+  .about-center { text-align: center; margin-bottom: 24px; }
+  .about-name { font-size: 24px; font-weight: 700; letter-spacing: 4px; }
+  .about-ver { margin-top: 6px; font-size: 12px; color: #eaf7d8; }
+  .about-sec { margin-bottom: 20px; }
+  .about-sec-title { font-size: 14px; color: #ffe066; margin-bottom: 10px; font-weight:700; }
+  .about-sec-body {
+    font-size: 14px; line-height: 1.8; color: #4a3418;
+    padding: 14px; background: rgba(255,248,225,.94); border:2px solid rgba(120,80,35,.3); border-radius: 10px;
+  }
+
+  /* ============ 游戏 ============ */
+  #view-game { display: none; flex-direction: column; background: linear-gradient(180deg,#5a9c3a,#4a852c); }
+  #view-game.active { display: flex; }
+  .game-top { display: flex; align-items: center; padding: 8px 12px; }
+  .game-back { width: 32px; height: 32px; border-radius: 50%; background: #7a4a22; color: #ffe9c7; font-size: 22px; line-height: 30px; text-align: center; cursor: pointer; }
+  .game-name { flex: 1; text-align: center; font-size: 16px; font-weight: 700; color:#fff8e7; text-shadow:1px 1px 0 rgba(0,0,0,.3); }
+  .game-steps { min-width: 60px; text-align: right; font-size: 13px; color: #eaf7d8; font-weight:600; }
+  .game-tools { display: flex; gap: 10px; justify-content: center; margin-bottom: 4px; }
+  .game-tool { font-size: 13px; padding: 6px 16px; background: linear-gradient(180deg,#a06a35,#7a4a22); color:#fff2dd; border:1px solid #5e3617; border-radius: 16px; cursor: pointer; }
+  .board-wrap { flex: 1; display: flex; align-items: center; justify-content: center; }
+  .board { box-sizing: content-box; border-radius: 6px; overflow: hidden; border: 4px solid #6d3f1c; box-shadow: 0 8px 20px rgba(0,0,0,.35); }
+  .board-row { display: flex; }
+  .cell { position: relative; flex: 0 0 auto; }
+  .cell.grass-a { background:
+      radial-gradient(circle at 22% 30%, rgba(255,255,255,.12) 0 2px, transparent 3px),
+      radial-gradient(circle at 72% 68%, rgba(0,0,0,.08) 0 2px, transparent 3px), #86c24b; }
+  .cell.grass-b { background:
+      radial-gradient(circle at 60% 26%, rgba(255,255,255,.1) 0 2px, transparent 3px),
+      radial-gradient(circle at 28% 72%, rgba(0,0,0,.08) 0 2px, transparent 3px), #76b23f; }
+  .sprite { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+  .sprite-floor { background: transparent; }
+
+  /* 树篱 */
+  .sprite-wall {
+    background:
+      radial-gradient(circle at 28% 32%, #5aa034 0 16%, transparent 17%),
+      radial-gradient(circle at 70% 30%, #4f902c 0 18%, transparent 19%),
+      radial-gradient(circle at 48% 70%, #438026 0 20%, transparent 21%),
+      linear-gradient(135deg, #3e7a24, #2e5e1a);
+    box-shadow: inset 1px 1px 2px rgba(255,255,255,.18), inset -1px -1px 3px rgba(0,0,0,.35);
+  }
+  /* 僵尸 */
+  .sprite-target {
+    width: 80%; height: 80%; left: 10%; top: 10%;
+    background:
+      radial-gradient(circle at 32% 40%, #fff 0 8%, transparent 9%),
+      radial-gradient(circle at 68% 40%, #fff 0 8%, transparent 9%),
+      radial-gradient(circle at 33% 42%, #3a2a2a 0 3.5%, transparent 4.5%),
+      radial-gradient(circle at 67% 42%, #3a2a2a 0 3.5%, transparent 4.5%),
+      linear-gradient(160deg, #b3c4a3, #93a786);
+    border-radius: 46% 46% 42% 42%;
+    box-shadow: inset -1px -2px 3px rgba(0,0,0,.22); opacity:.92;
+  }
+  .sprite-target::after {
+    content:''; position:absolute; left:34%; right:34%; bottom:20%;
+    height:12%; background:#5a3a3a; border-radius:0 0 30px 30px;
+  }
+  /* 植物 */
+  .sprite-box, .sprite-box-on-target {
+    background:
+      radial-gradient(circle at 59% 34%, #1b5e20 0 3.2%, transparent 4.2%),
+      radial-gradient(circle at 50% 36%, #7cc97f 0 30%, #43a047 31%, transparent 33%);
+  }
+  .sprite-box::before, .sprite-box-on-target::before {
+    content:''; position:absolute; left:47%; top:58%; width:6%; height:30%;
+    background:#2e7d32; border-radius:3px;
+  }
+  .sprite-box::after, .sprite-box-on-target::after {
+    content:''; position:absolute; top:66%; left:18%; width:64%; height:20%;
+    background:
+      radial-gradient(ellipse at 24% 50%, #57b85a 0 46%, transparent 47%),
+      radial-gradient(ellipse at 76% 50%, #57b85a 0 46%, transparent 47%);
+  }
+  .sprite-box-on-target { filter: drop-shadow(0 0 6px rgba(255,224,102,.95)); }
+  .sprite-box-on-target::before { background:#f9a825; }
+  /* 脑子 */
+  .sprite-player {
+    width: 78%; height: 74%; left: 11%; top: 13%;
+    background:
+      radial-gradient(circle at 41% 56%, #5a2f3f 0 3%, transparent 4%),
+      radial-gradient(circle at 60% 56%, #5a2f3f 0 3%, transparent 4%),
+      radial-gradient(circle at 38% 28%, #fcd5e3, #f49abe);
+    border-radius: 52% 48% 50% 46%;
+    box-shadow: inset -1px -2px 4px rgba(190,80,120,.4), 0 2px 3px rgba(0,0,0,.3);
+  }
+  .sprite-player::before {
+    content:''; position:absolute; left:18%; top:22%; width:34%; height:28%;
+    border:2px solid #e06a95; border-bottom:none; border-radius:50% 50% 0 0;
+  }
+  .sprite-player::after {
+    content:''; position:absolute; right:16%; top:38%; width:28%; height:24%;
+    border:2px solid #e06a95; border-top:none; border-radius:0 0 50% 50%;
+  }
+
+  .dpad { margin: 10px 0 16px; display: flex; flex-direction: column; align-items: center; }
+  .dpad-row { display: flex; }
+  .dpad-btn {
+    width: 48px; height: 46px; display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(180deg,#a06a35,#7a4a22); color: #fff2dd; font-size: 15px;
+    margin: 3px; border-radius: 9px; border:1px solid #5e3617; box-shadow: 0 4px 0 #5e3617; cursor: pointer;
+  }
+  .dpad-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 #5e3617; }
+  .dpad-center { background: transparent; border: none; box-shadow: none; }
+  .dpad-center:active { transform: none; }
+
+  .mask {
+    position: fixed; inset: 0; background: rgba(20,40,10,.62);
+    display: none; align-items: center; justify-content: center; z-index: 100;
+  }
+  .mask.show { display: flex; }
+  .win-dialog {
+    width: 300px; background: linear-gradient(180deg,#fff6e0,#f3e2bd);
+    border-radius: 16px; padding: 22px 20px; text-align: center;
+    border:4px solid #8a5a28; box-shadow: 0 12px 36px rgba(0,0,0,.45);
+  }
+  .eat-banner {
+    background: linear-gradient(135deg,#ff8a50,#e2501e);
+    border:3px solid #ffca28; border-radius: 12px; padding: 18px 12px;
+    box-shadow: inset 0 -3px 6px rgba(160,40,10,.4);
+  }
+  .eat-text {
+    font-size: 25px; font-weight: 800; color:#fff; letter-spacing:1px; line-height:1.25;
+    text-shadow: 1px 1px 0 #b33a12, -1px 1px 0 #b33a12, 1px -1px 0 #b33a12, -1px -1px 0 #b33a12, 0 2px 4px rgba(0,0,0,.3);
+  }
+  .win-steps { margin: 18px 0 16px; font-size: 14px; color:#7a5226; font-weight:600; }
+  .win-btns { display: flex; gap: 8px; justify-content: center; }
+  .win-btn { flex:1; padding: 11px 0; background:#cdb78e; color:#5e3f1a; border-radius: 18px; font-size: 13px; font-weight:600; cursor:pointer; }
+  .win-btn.primary { background: linear-gradient(135deg,#ffc947,#f0a92e); color:#5e3a10; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- 主菜单 -->
+  <div class="view active" id="view-home">
+    <div class="hero">
+      <div class="brain-logo"></div>
+      <div class="home-title">脑子推植物</div>
+      <div class="home-sub">草坪推箱子 · 小心僵尸</div>
+    </div>
+    <div class="home-menu">
+      <div class="btn-primary" onclick="startGame()">▶ <span id="startText">开始游戏</span></div>
+      <div class="menu-item" onclick="go('levels')">
+        <div class="mi-dot"></div>
+        <div class="mi-label">选择关卡</div>
+        <div class="mi-value" id="homeProgress">0/12</div>
+        <div class="mi-arrow">›</div>
+      </div>
+      <div class="menu-item" onclick="go('settings')">
+        <div class="mi-dot" style="background:#8a6a3a"></div>
+        <div class="mi-label">设置</div>
+        <div class="mi-arrow">›</div>
+      </div>
+      <div class="menu-item" onclick="go('about')">
+        <div class="mi-dot" style="background:#c98a4a"></div>
+        <div class="mi-label">关于</div>
+        <div class="mi-arrow">›</div>
+      </div>
+    </div>
+    <div class="home-footer">脑子推植物 · 喂饱所有僵尸</div>
+  </div>
+
+  <!-- 选关 -->
+  <div class="view" id="view-levels">
+    <div class="sub-head"><div class="sub-back" onclick="go('home')">‹</div><div class="sub-title">选择关卡</div></div>
+    <div class="sub-body">
+      <div class="lv-progress">
+        <span class="lv-progress-text" id="lvText">0/12</span>
+        <div class="lv-bar"><div class="lv-fill" id="lvFill" style="width:0"></div></div>
+      </div>
+      <div class="lv-grid" id="lvGrid"></div>
+    </div>
+  </div>
+
+  <!-- 设置 -->
+  <div class="view" id="view-settings">
+    <div class="sub-head"><div class="sub-back" onclick="go('home')">‹</div><div class="sub-title">设置</div></div>
+    <div class="sub-body">
+      <div class="set-row"><span class="set-label">音效</span><div class="switch" id="swSound" onclick="toggle('sound')"></div></div>
+      <div class="set-row"><span class="set-label">震动反馈</span><div class="switch" id="swVibrate" onclick="toggle('vibrate')"></div></div>
+      <div class="set-row" onclick="clearProgress()"><span class="set-label" style="color:#d9534f">清除通关进度</span><span class="mi-arrow">›</span></div>
+      <div class="set-tip">关卡与进度仅保存在本机，无需联网。</div>
+    </div>
+  </div>
+
+  <!-- 关于 -->
+  <div class="view" id="view-about">
+    <div class="sub-head"><div class="sub-back" onclick="go('home')">‹</div><div class="sub-title">关于</div></div>
+    <div class="sub-body">
+      <div class="about-center">
+        <div class="brain-logo" style="margin:0 auto 14px"></div>
+        <div class="about-name">脑子推植物</div>
+        <div class="about-ver">版本 1.0.0</div>
+      </div>
+      <div class="about-sec">
+        <div class="about-sec-title">游戏介绍</div>
+        <div class="about-sec-body">你扮演一颗会走路的脑子，把一株株植物推到僵尸面前，让所有僵尸都被植物喂饱。植物只能推、不能拉，走错了可以撤销或重开。</div>
+      </div>
+      <div class="about-sec">
+        <div class="about-sec-title">玩法说明</div>
+        <div class="about-sec-body">
+          · 用方向键或滑动来移动脑子<br>
+          · 走到植物旁即可推动它，前方需有空间<br>
+          · 把每株植物都推到僵尸面前即可过关<br>
+          · 植物对上僵尸后会发出金色光芒<br>
+          · 过关显示大字：脑子吃掉了你的僵尸
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 游戏 -->
+  <div class="view" id="view-game">
+    <div class="game-top">
+      <div class="game-back" onclick="goHome()">‹</div>
+      <div class="game-name" id="gameName">第 1 关</div>
+      <div class="game-steps">步数 <span id="steps">0</span></div>
+    </div>
+    <div class="game-tools">
+      <div class="game-tool" onclick="undo()">↩ 撤销</div>
+      <div class="game-tool" onclick="restart()">⟳ 重开</div>
+      <div class="game-tool" onclick="goLevels()">选关</div>
+    </div>
+    <div class="board-wrap" id="boardWrap"><div class="board" id="board"></div></div>
+    <div class="dpad">
+      <div class="dpad-row"><div class="dpad-btn" onclick="move('up')">▲</div></div>
+      <div class="dpad-row">
+        <div class="dpad-btn" onclick="move('left')">◀</div>
+        <div class="dpad-btn dpad-center"></div>
+        <div class="dpad-btn" onclick="move('right')">▶</div>
+      </div>
+      <div class="dpad-row"><div class="dpad-btn" onclick="move('down')">▼</div></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="mask" id="winMask">
+  <div class="win-dialog">
+    <div class="eat-banner"><div class="eat-text">脑子吃掉了你的僵尸</div></div>
+    <div class="win-steps">用了 <span id="winSteps">0</span> 步</div>
+    <div class="win-btns">
+      <div class="win-btn" onclick="goHome()">主页</div>
+      <div class="win-btn" onclick="restart()">再玩</div>
+      <div class="win-btn primary" id="winNext" onclick="nextLevel()">下一关</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const levels = [
+  { name: '第 1 关 · 入门', map: ['#######','#     #','# .$@ #','#     #','#######'] },
+  { name: '第 2 关 · 向上', map: ['#######','#  .  #','#  $  #','#  @  #','#     #','#######'] },
+  { name: '第 3 关 · 转弯', map: ['########','#   .  #','# $    #','# @    #','#      #','########'] },
+  { name: '第 4 关 · 双箱', map: ['########','# .  . #','# $  $ #','#      #','#  @   #','########'] },
+  { name: '第 5 关 · 对称', map: ['#########','# .   . #','# $   $ #','#       #','#   @   #','#########'] },
+  { name: '第 6 关 · 归位', map: ['#########','#       #','# .$ .$ #','#       #','#   @   #','#       #','#########'] },
+  { name: '第 7 关 · 三箱', map: ['#########','#       #','# . . . #','# $ $ $ #','#       #','#   @   #','#########'] },
+  { name: '第 8 关 · 长廊', map: ['##########','#        #','# .    . #','# $    $ #','#        #','#   @    #','##########'] },
+  { name: '第 9 关 · 四方', map: ['##########','# .    . #','#  $  $  #','#        #','#  $  $  #','# .    . #','#   @    #','##########'] },
+  { name: '第 10 关 · 三星', map: ['#########','#       #','# . . . #','#  $$$  #','#       #','#   @   #','#########'] },
+  { name: '第 11 关 · 四角', map: ['##########','#.      .#','# $    $ #','#        #','# $    $ #','#.      .#','#   @    #','##########'] },
+  { name: '第 12 关 · 终章', map: ['##########','#        #','# . . .  #','#  $$$   #','#        #','#   @    #','##########'] }
+];
+
+const DIRS = { up:[-1,0], down:[1,0], left:[0,-1], right:[0,1] };
+let levelIndex=0, cells=[], targets=[], player={r:0,c:0}, steps=0, won=false, history=[], cellSize=0;
+let unlocked = Number(localStorage.getItem('sokoban_unlocked')||1);
+let settings = JSON.parse(localStorage.getItem('sokoban_settings')||'{"sound":true,"vibrate":true}');
+
+function go(page){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+page).classList.add('active');
+  if (page==='home') refreshHome();
+  if (page==='levels') refreshLevels();
+  if (page==='settings') refreshSettings();
+}
+function refreshHome(){
+  const cleared = Math.min(unlocked-1, levels.length);
+  document.getElementById('homeProgress').textContent = cleared+'/'+levels.length;
+  document.getElementById('startText').textContent = cleared>0?'继续游戏':'开始游戏';
+}
+function startGame(){
+  const lv = Math.min(unlocked-1, levels.length-1);
+  go('game'); loadLevel(lv);
+}
+function goLevels(){ go('levels'); }
+function goHome(){ go('home'); }
+
+function refreshLevels(){
+  const cleared = Math.min(unlocked-1, levels.length);
+  document.getElementById('lvText').textContent = cleared+'/'+levels.length;
+  document.getElementById('lvFill').style.width = (cleared/levels.length*100)+'%';
+  const g = document.getElementById('lvGrid'); g.innerHTML='';
+  levels.forEach((lv,i)=>{
+    let st = i+1<unlocked?'cleared':(i+1===unlocked?'current':'locked');
+    const d=document.createElement('div');
+    d.className='lv-cell '+st; d.textContent=i+1;
+    if (st!=='locked') d.onclick=()=>{ go('game'); loadLevel(i); };
+    else d.onclick=()=>alert('该关卡未解锁');
+    g.appendChild(d);
+  });
+}
+
+function refreshSettings(){
+  document.getElementById('swSound').className = 'switch'+(settings.sound?' on':'');
+  document.getElementById('swVibrate').className = 'switch'+(settings.vibrate?' on':'');
+}
+function toggle(key){
+  settings[key]=!settings[key];
+  localStorage.setItem('sokoban_settings', JSON.stringify(settings));
+  refreshSettings();
+}
+function clearProgress(){
+  if (confirm('确定要清除所有通关进度吗？')){
+    unlocked=1;
+    localStorage.setItem('sokoban_unlocked',1);
+    alert('已清除');
+  }
+}
+
+function parseLevel(level){
+  const raw=level.map, rows=raw.length, cols=Math.max(...raw.map(r=>r.length));
+  cells=[]; targets=[];
+  for (let r=0;r<rows;r++){
+    const row=[];
+    for (let c=0;c<cols;c++){
+      const ch=c<raw[r].length?raw[r][c]:' ';
+      let cls='floor';
+      if (ch==='#') cls='wall';
+      else if (ch==='.'){ cls='target'; targets.push([r,c]); }
+      else if (ch==='$') cls='box';
+      else if (ch==='*'){ cls='box-on-target'; targets.push([r,c]); }
+      else if (ch==='@'||ch==='+'){ cls='player'; if(ch==='+')targets.push([r,c]); }
+      row.push(cls);
+    }
+    cells.push(row);
+  }
+  return {rows,cols};
+}
+
+function loadLevel(index){
+  levelIndex=index;
+  const {rows,cols}=parseLevel(levels[index]);
+  history=[]; steps=0; won=false;
+  for (let r=0;r<rows;r++) for (let c=0;c<cols;c++) if (cells[r][c]==='player') player={r,c};
+  const wrap=document.getElementById('boardWrap');
+  const maxW=Math.min(window.innerWidth-24,480), maxH=wrap.clientHeight-10;
+  let size=Math.floor(Math.min(maxW/cols,maxH/rows));
+  if (size<18)size=18; if(size>52)size=52;
+  cellSize=size;
+  render(cellSize);
+  document.getElementById('gameName').textContent=levels[index].name;
+  document.getElementById('steps').textContent='0';
+}
+function render(size){
+  const board=document.getElementById('board'); board.innerHTML='';
+  board.style.width=(size*cells[0].length)+'px';
+  cells.forEach((row,r)=>{
+    const rd=document.createElement('div'); rd.className='board-row';
+    row.forEach((cls,c)=>{
+      const cell=document.createElement('div');
+      cell.className='cell '+((r+c)%2===0?'grass-a':'grass-b');
+      cell.style.width=size+'px'; cell.style.height=size+'px';
+      const s=document.createElement('div'); s.className='sprite sprite-'+cls;
+      cell.appendChild(s); rd.appendChild(cell);
+    });
+    board.appendChild(rd);
+  });
+}
+function isTarget(r,c){ return targets.some(t=>t[0]===r&&t[1]===c); }
+
+function move(dirName){
+  if (won) return;
+  const [dr,dc]=DIRS[dirName];
+  const pr=player.r, pc=player.c, nr=pr+dr, nc=pc+dc;
+  if (nr<0||nr>=cells.length||nc<0||nc>=cells[0].length) return;
+  const tc=cells[nr][nc];
+  if (tc==='wall') return;
+  const push=tc==='box'||tc==='box-on-target';
+  if (push){
+    const br=pr+dr*2, bc=pc+dc*2;
+    if (br<0||br>=cells.length||bc<0||bc>=cells[0].length) return;
+    const beyond=cells[br][bc];
+    if (beyond==='wall'||beyond==='box'||beyond==='box-on-target') return;
+    saveHistory();
+    cells[br][bc]=beyond==='target'?'box-on-target':'box';
+    cells[nr][nc]='player';
+  } else { saveHistory(); cells[nr][nc]='player'; }
+  cells[pr][pc]=isTarget(pr,pc)?'target':'floor';
+  player={r:nr,c:nc}; steps++;
+  render(cellSize);
+  document.getElementById('steps').textContent=steps;
+  checkWin();
+}
+function saveHistory(){
+  history.push({cells:cells.map(r=>r.slice()),player:{...player},steps});
+}
+function checkWin(){
+  const done=targets.every(t=>cells[t[0]][t[1]]==='box-on-target');
+  if (done){
+    won=true;
+    if (levelIndex+2>unlocked){ unlocked=levelIndex+2; localStorage.setItem('sokoban_unlocked',unlocked); }
+    document.getElementById('winSteps').textContent=steps;
+    document.getElementById('winNext').textContent=levelIndex<levels.length-1?'下一关':'全部通关';
+    document.getElementById('winMask').classList.add('show');
+    if (settings.vibrate&&navigator.vibrate) navigator.vibrate(30);
+  }
+}
+function undo(){
+  if (!history.length){ alert('没有可撤销的步骤'); return; }
+  const p=history.pop(); cells=p.cells; player=p.player; steps=p.steps; won=false;
+  render(cellSize);
+  document.getElementById('steps').textContent=steps;
+}
+function restart(){ document.getElementById('winMask').classList.remove('show'); loadLevel(levelIndex); }
+function nextLevel(){
+  document.getElementById('winMask').classList.remove('show');
+  if (levelIndex<levels.length-1) loadLevel(levelIndex+1); else goHome();
+}
+window.addEventListener('keydown',e=>{
+  const m={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right'};
+  if (m[e.key]){ e.preventDefault(); move(m[e.key]); }
+});
+let ts=null;
+document.getElementById('boardWrap').addEventListener('touchstart',e=>{ts=e.touches[0];},{passive:true});
+document.getElementById('boardWrap').addEventListener('touchend',e=>{
+  if(!ts)return;
+  const t=e.changedTouches[0], dx=t.clientX-ts.clientX, dy=t.clientY-ts.clientY;
+  if(Math.max(Math.abs(dx),Math.abs(dy))<20)return;
+  if(Math.abs(dx)>Math.abs(dy))move(dx>0?'right':'left'); else move(dy>0?'down':'up');
+  ts=null;
+},{passive:true});
+
+refreshHome();
+</script>
+</body>
+</html>

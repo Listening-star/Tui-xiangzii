@@ -1,0 +1,36 @@
+<view class="home">
+
+  <view class="hero">
+    <view class="brain-logo"></view>
+    <view class="title">脑子推植物</view>
+    <view class="subtitle">草坪推箱子 · 小心僵尸</view>
+  </view>
+
+  <view class="menu">
+    <view class="btn-primary" bindtap="startGame">
+      <text class="play-icon">▶</text>
+      <text>{{cleared > 0 ? '继续游戏' : '开始游戏'}}</text>
+    </view>
+
+    <view class="menu-item" bindtap="goLevels">
+      <view class="mi-icon mi-icon-grid"></view>
+      <text class="mi-label">选择关卡</text>
+      <text class="mi-value">{{cleared}}/{{total}}</text>
+      <text class="mi-arrow">›</text>
+    </view>
+
+    <view class="menu-item" bindtap="goSettings">
+      <view class="mi-icon mi-icon-gear"></view>
+      <text class="mi-label">设置</text>
+      <text class="mi-arrow">›</text>
+    </view>
+
+    <view class="menu-item" bindtap="goAbout">
+      <view class="mi-icon mi-icon-info"></view>
+      <text class="mi-label">关于</text>
+      <text class="mi-arrow">›</text>
+    </view>
+  </view>
+
+  <view class="footer">脑子推植物 · 喂饱所有僵尸</view>
+</view>

@@ -1,0 +1,121 @@
+.levels-page {
+  min-height: 100vh;
+  padding: 30rpx 36rpx 60rpx;
+  box-sizing: border-box;
+}
+
+/* 进度条 */
+.progress-tip {
+  display: flex;
+  align-items: center;
+  margin-bottom: 40rpx;
+}
+.pt-label {
+  font-size: 26rpx;
+  color: #f0fbdc;
+  margin-right: 20rpx;
+  font-weight: 600;
+}
+.pt-bar {
+  flex: 1;
+  height: 16rpx;
+  background: rgba(60,40,20,.35);
+  border-radius: 8rpx;
+  overflow: hidden;
+}
+.pt-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ffd861, #f0a92e);
+  border-radius: 8rpx;
+}
+.pt-num {
+  margin-left: 20rpx;
+  font-size: 26rpx;
+  color: #f0fbdc;
+}
+
+/* 关卡网格 */
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24rpx;
+}
+.cell {
+  position: relative;
+  width: calc((100% - 72rpx) / 4);
+  height: 150rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 18rpx;
+  background: #fff3d6;
+  border: 3rpx solid rgba(120,80,35,.35);
+  box-shadow: 0 5rpx 0 rgba(90,60,25,.3);
+}
+.num {
+  font-size: 44rpx;
+  font-weight: 700;
+  color: #6a4a20;
+}
+
+.cell-cleared {
+  background: #3f7a26;
+  border-color: #2e5e1a;
+}
+.cell-cleared .num {
+  color: #dff5c8;
+}
+.check {
+  position: absolute;
+  right: 12rpx;
+  top: 10rpx;
+  font-size: 24rpx;
+  color: #ffe066;
+}
+
+.cell-current {
+  background: linear-gradient(135deg, #ffd861, #f0a92e);
+  border-color: #d98f22;
+  box-shadow: 0 6rpx 18rpx rgba(240,169,46,.5);
+}
+.cell-current .num {
+  color: #5e3a10;
+}
+
+.cell-locked {
+  background: rgba(90,60,30,.45);
+  border-color: rgba(60,40,20,.4);
+}
+.cell-locked .num {
+  color: rgba(255,240,200,.4);
+}
+
+/* 锁图标 */
+.lock {
+  position: absolute;
+  right: 12rpx;
+  top: 12rpx;
+  width: 30rpx;
+  height: 30rpx;
+}
+.lock-shackle {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 16rpx;
+  height: 12rpx;
+  transform: translateX(-50%);
+  border: 3rpx solid rgba(255,240,200,.5);
+  border-bottom: none;
+  border-radius: 9rpx 9rpx 0 0;
+}
+.lock-body {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 24rpx;
+  height: 16rpx;
+  transform: translateX(-50%);
+  background: rgba(255,240,200,.5);
+  border-radius: 3rpx;
+}

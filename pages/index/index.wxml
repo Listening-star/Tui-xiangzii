@@ -1,0 +1,60 @@
+<view class="page">
+
+  <view class="topbar">
+    <view class="back-btn" bindtap="goHome">
+      <text class="back-icon">‹</text>
+    </view>
+    <view class="level-name">{{levelName}}</view>
+    <view class="steps">步数 {{steps}}</view>
+  </view>
+
+  <view class="toolbar">
+    <view class="tool-btn" bindtap="undo">↩ 撤销</view>
+    <view class="tool-btn" bindtap="restart">⟳ 重开</view>
+    <view class="tool-btn" bindtap="goLevels">选关</view>
+  </view>
+
+  <view class="board-wrap" bindtouchstart="onTouchStart" bindtouchend="onTouchEnd">
+    <view class="board" style="width:{{cols*cellSize}}px;height:{{rows*cellSize}}px;">
+      <block wx:for="{{cells}}" wx:for-item="row" wx:for-index="r" wx:key="r">
+        <view class="board-row">
+          <view wx:for="{{row}}" wx:for-item="cell" wx:for-index="c" wx:key="c"
+                class="cell {{(r+c)%2===0?'grass-a':'grass-b'}}" style="width:{{cellSize}}px;height:{{cellSize}}px;">
+            <image wx:if="{{cell.useImg}}" class="cell-img" src="{{cell.img}}" mode="aspectFill"/>
+            <view wx:else class="sprite {{cell.cls}}"></view>
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <view class="dpad">
+    <view class="dpad-row">
+      <view class="dpad-btn" bindtap="onUp">▲</view>
+    </view>
+    <view class="dpad-row">
+      <view class="dpad-btn" bindtap="onLeft">◀</view>
+      <view class="dpad-btn dpad-center"></view>
+      <view class="dpad-btn" bindtap="onRight">▶</view>
+    </view>
+    <view class="dpad-row">
+      <view class="dpad-btn" bindtap="onDown">▼</view>
+    </view>
+  </view>
+
+</view>
+
+<view class="mask" wx:if="{{won}}">
+  <view class="win-dialog">
+    <view class="eat-banner">
+      <view class="eat-text">脑子吃掉了你的僵尸</view>
+    </view>
+    <view class="win-steps">用了 {{steps}} 步</view>
+    <view class="win-btns">
+      <view class="win-btn" bindtap="goHome">主页</view>
+      <view class="win-btn" bindtap="restart">再玩一次</view>
+      <view class="win-btn primary" wx:if="{{hasNext}}" bindtap="nextLevel">下一关</view>
+      <view class="win-btn primary" wx:else bindtap="goHome">全部通关</view>
+    </view>
+  </view>
+</view>

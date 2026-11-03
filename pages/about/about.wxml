@@ -1,0 +1,55 @@
+<view class="about-page">
+
+  <view class="head">
+    <view class="brain-logo"></view>
+    <view class="app-name">脑子推植物</view>
+    <view class="version">版本 {{version}}</view>
+  </view>
+
+  <view class="section">
+    <view class="section-title">游戏介绍</view>
+    <view class="section-body">
+      这是一款草坪主题的推箱子益智游戏。你扮演一颗会走路的脑子，把一株株植物推到僵尸面前，让所有僵尸都被植物喂饱。植物只能推、不能拉，走错了可以撤销或重开。
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-title">玩法说明</view>
+    <view class="section-body">
+      <view class="line">· 用方向键或在屏幕上滑动来移动脑子</view>
+      <view class="line">· 走到植物旁即可推动它，植物前方需有空间</view>
+      <view class="line">· 把每株植物都推到僵尸面前即可过关</view>
+      <view class="line">· 植物对上僵尸后会发出金色光芒</view>
+      <view class="line">· 过关会显示大字：脑子吃掉了你的僵尸</view>
+      <view class="line">· 可随时撤销或重开当前关卡</view>
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-title">图例</view>
+    <view class="legend">
+      <view class="legend-row">
+        <view class="legend-icon l-brain"></view>
+        <text>脑子（玩家）</text>
+      </view>
+      <view class="legend-row">
+        <view class="legend-icon l-plant"></view>
+        <text>植物（可推动）</text>
+      </view>
+      <view class="legend-row">
+        <view class="legend-icon l-zombie"></view>
+        <text>僵尸（目标点）</text>
+      </view>
+      <view class="legend-row">
+        <view class="legend-icon l-done"></view>
+        <text>植物对上僵尸</text>
+      </view>
+      <view class="legend-row">
+        <view class="legend-icon l-wall"></view>
+        <text>树篱（障碍）</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="footer">纯单机 · 无需联网 · 免费畅玩</view>
+</view>

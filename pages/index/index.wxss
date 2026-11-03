@@ -1,0 +1,337 @@
+/* ============ 页面：草坪主题 ============ */
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 12rpx;
+  box-sizing: border-box;
+  background: linear-gradient(180deg, #5a9c3a 0%, #4a852c 100%);
+}
+
+/* ============ 顶部信息 ============ */
+.topbar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 20rpx 16rpx 10rpx;
+  box-sizing: border-box;
+}
+.back-btn {
+  width: 64rpx;
+  height: 64rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #7a4a22;
+  border: 2rpx solid #5e3617;
+  border-radius: 50%;
+  box-shadow: 0 3rpx 0 #5e3617;
+}
+.back-icon {
+  font-size: 48rpx;
+  color: #ffe9c7;
+  line-height: 1;
+  margin-top: -4rpx;
+}
+.level-name {
+  flex: 1;
+  text-align: center;
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #fff8e7;
+  text-shadow: 1rpx 2rpx 0 rgba(0,0,0,.35);
+}
+.steps {
+  min-width: 110rpx;
+  text-align: right;
+  font-size: 26rpx;
+  color: #eaf7d8;
+  font-weight: 600;
+}
+
+/* ============ 工具栏 ============ */
+.toolbar {
+  display: flex;
+  gap: 16rpx;
+  margin-bottom: 12rpx;
+}
+.tool-btn {
+  font-size: 26rpx;
+  padding: 10rpx 28rpx;
+  background: linear-gradient(180deg, #a06a35, #7a4a22);
+  color: #fff2dd;
+  border: 2rpx solid #5e3617;
+  border-radius: 28rpx;
+  box-shadow: 0 4rpx 0 #5e3617;
+}
+.tool-btn:active {
+  transform: translateY(3rpx);
+  box-shadow: 0 1rpx 0 #5e3617;
+}
+
+/* ============ 棋盘 ============ */
+.board-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+.board {
+  box-sizing: content-box;
+  border-radius: 10rpx;
+  overflow: hidden;
+  border: 6rpx solid #6d3f1c;
+  box-shadow: 0 8rpx 24rpx rgba(0,0,0,.35);
+}
+.board-row {
+  display: flex;
+}
+.cell {
+  position: relative;
+  flex: 0 0 auto;
+}
+/* 草地棋盘底色 */
+.cell.grass-a {
+  background:
+    radial-gradient(circle at 22% 30%, rgba(255,255,255,.12) 0 4rpx, transparent 5rpx),
+    radial-gradient(circle at 72% 68%, rgba(0,0,0,.08) 0 3rpx, transparent 4rpx),
+    #86c24b;
+}
+.cell.grass-b {
+  background:
+    radial-gradient(circle at 60% 26%, rgba(255,255,255,.10) 0 3rpx, transparent 4rpx),
+    radial-gradient(circle at 28% 72%, rgba(0,0,0,.08) 0 3rpx, transparent 4rpx),
+    #76b23f;
+}
+
+/* ============ 精灵基础 ============ */
+.sprite {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+.cell-img {
+  width: 100%;
+  height: 100%;
+}
+.sprite-floor {
+  background: transparent;
+}
+
+/* ============ 树篱墙 ============ */
+.sprite-wall {
+  background:
+    radial-gradient(circle at 28% 32%, #5aa034 0 16%, transparent 17%),
+    radial-gradient(circle at 70% 30%, #4f902c 0 18%, transparent 19%),
+    radial-gradient(circle at 48% 70%, #438026 0 20%, transparent 21%),
+    linear-gradient(135deg, #3e7a24, #2e5e1a);
+  box-shadow:
+    inset 2rpx 2rpx 3rpx rgba(255,255,255,.18),
+    inset -2rpx -2rpx 4rpx rgba(0,0,0,.35);
+}
+
+/* ============ 僵尸（目标点） ============ */
+.sprite-target {
+  width: 80%;
+  height: 80%;
+  left: 10%;
+  top: 10%;
+  background:
+    radial-gradient(circle at 32% 40%, #ffffff 0 8%, transparent 9%),
+    radial-gradient(circle at 68% 40%, #ffffff 0 8%, transparent 9%),
+    radial-gradient(circle at 33% 42%, #3a2a2a 0 3.5%, transparent 4.5%),
+    radial-gradient(circle at 67% 42%, #3a2a2a 0 3.5%, transparent 4.5%),
+    linear-gradient(160deg, #b3c4a3, #93a786);
+  border-radius: 46% 46% 42% 42%;
+  box-shadow: inset -2rpx -3rpx 4rpx rgba(0,0,0,.22);
+  opacity: .92;
+}
+.sprite-target::after {
+  content: '';
+  position: absolute;
+  left: 34%;
+  right: 34%;
+  bottom: 20%;
+  height: 12%;
+  background: #5a3a3a;
+  border-radius: 0 0 60rpx 60rpx;
+}
+
+/* ============ 植物（箱子） ============ */
+.sprite-box,
+.sprite-box-on-target {
+  background:
+    radial-gradient(circle at 59% 34%, #1b5e20 0 3.2%, transparent 4.2%),
+    radial-gradient(circle at 50% 36%, #7cc97f 0 30%, #43a047 31%, transparent 33%);
+}
+.sprite-box::before,
+.sprite-box-on-target::before {
+  content: '';
+  position: absolute;
+  left: 47%;
+  top: 58%;
+  width: 6%;
+  height: 30%;
+  background: #2e7d32;
+  border-radius: 4rpx;
+}
+.sprite-box::after,
+.sprite-box-on-target::after {
+  content: '';
+  position: absolute;
+  top: 66%;
+  left: 18%;
+  width: 64%;
+  height: 20%;
+  background:
+    radial-gradient(ellipse at 24% 50%, #57b85a 0 46%, transparent 47%),
+    radial-gradient(ellipse at 76% 50%, #57b85a 0 46%, transparent 47%);
+}
+/* 植物碰到僵尸：金色发光 */
+.sprite-box-on-target {
+  filter: drop-shadow(0 0 8rpx rgba(255,224,102,.95));
+}
+.sprite-box-on-target::before {
+  background: #f9a825;
+}
+
+/* ============ 脑子（玩家） ============ */
+.sprite-player {
+  width: 78%;
+  height: 74%;
+  left: 11%;
+  top: 13%;
+  background:
+    radial-gradient(circle at 41% 56%, #5a2f3f 0 3%, transparent 4%),
+    radial-gradient(circle at 60% 56%, #5a2f3f 0 3%, transparent 4%),
+    radial-gradient(circle at 38% 28%, #fcd5e3, #f49abe);
+  border-radius: 52% 48% 50% 46%;
+  box-shadow: inset -2rpx -3rpx 5rpx rgba(190,80,120,.4), 0 2rpx 4rpx rgba(0,0,0,.3);
+}
+.sprite-player::before {
+  content: '';
+  position: absolute;
+  left: 18%;
+  top: 22%;
+  width: 34%;
+  height: 28%;
+  border: 2rpx solid #e06a95;
+  border-bottom: none;
+  border-radius: 50% 50% 0 0;
+}
+.sprite-player::after {
+  content: '';
+  position: absolute;
+  right: 16%;
+  top: 38%;
+  width: 28%;
+  height: 24%;
+  border: 2rpx solid #e06a95;
+  border-top: none;
+  border-radius: 0 0 50% 50%;
+}
+
+/* ============ 方向键 ============ */
+.dpad {
+  margin: 14rpx 0 22rpx;
+}
+.dpad-row {
+  display: flex;
+}
+.dpad-btn {
+  width: 96rpx;
+  height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #a06a35, #7a4a22);
+  color: #fff2dd;
+  font-size: 30rpx;
+  margin: 6rpx;
+  border-radius: 16rpx;
+  border: 2rpx solid #5e3617;
+  box-shadow: 0 5rpx 0 #5e3617;
+}
+.dpad-btn:active {
+  transform: translateY(4rpx);
+  box-shadow: 0 1rpx 0 #5e3617;
+}
+.dpad-center {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+.dpad-center:active {
+  transform: none;
+}
+
+/* ============ 过关弹窗 ============ */
+.mask {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(20,40,10,.62);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+.win-dialog {
+  width: 600rpx;
+  background: linear-gradient(180deg, #fff6e0, #f3e2bd);
+  border-radius: 24rpx;
+  padding: 30rpx 28rpx;
+  text-align: center;
+  border: 6rpx solid #8a5a28;
+  box-shadow: 0 12rpx 40rpx rgba(0,0,0,.45);
+}
+.eat-banner {
+  background: linear-gradient(135deg, #ff8a50, #e2501e);
+  border: 5rpx solid #ffca28;
+  border-radius: 16rpx;
+  padding: 26rpx 16rpx;
+  box-shadow: inset 0 -4rpx 8rpx rgba(160,40,10,.4);
+}
+.eat-text {
+  font-size: 48rpx;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: 2rpx;
+  line-height: 1.25;
+  text-shadow:
+    2rpx 2rpx 0 #b33a12,
+    -2rpx 2rpx 0 #b33a12,
+    2rpx -2rpx 0 #b33a12,
+    -2rpx -2rpx 0 #b33a12,
+    0 3rpx 5rpx rgba(0,0,0,.35);
+}
+.win-steps {
+  margin: 22rpx 0 20rpx;
+  font-size: 28rpx;
+  color: #7a5226;
+  font-weight: 600;
+}
+.win-btns {
+  display: flex;
+  gap: 14rpx;
+  justify-content: center;
+}
+.win-btn {
+  flex: 1;
+  padding: 16rpx 0;
+  background: #cdb78e;
+  color: #5e3f1a;
+  border-radius: 30rpx;
+  font-size: 26rpx;
+  font-weight: 600;
+}
+.win-btn.primary {
+  background: linear-gradient(135deg, #ffc947, #f0a92e);
+  color: #5e3a10;
+}
